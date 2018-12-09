@@ -75,7 +75,7 @@ namespace SoundControlByUrl.Controllers
                 }
 
                 List<Device> devices = new List<Device>();
-                using (FileStream fs = new FileStream("C://Media//devices.json", FileMode.Open))
+                using (FileStream fs = new FileStream(config.DeviceConfigPath, FileMode.Open))
                 {
                     DataContractJsonSerializer jsonFormatter = new DataContractJsonSerializer(typeof(List<Device>));
                     devices = (List<Device>)jsonFormatter.ReadObject(fs);
@@ -143,8 +143,9 @@ namespace SoundControlByUrl.Controllers
         [HttpGet]
         public void Stop(string locationId)
         {
+            config = GetConfig();
             List<Device> devices = new List<Device>();
-            using (FileStream fs = new FileStream("C://Media//devices.json", FileMode.Open))
+            using (FileStream fs = new FileStream(config.DeviceConfigPath, FileMode.Open))
             {
                 DataContractJsonSerializer jsonFormatter = new DataContractJsonSerializer(typeof(List<Device>));
                 devices = (List<Device>)jsonFormatter.ReadObject(fs);
@@ -178,14 +179,14 @@ namespace SoundControlByUrl.Controllers
 
         public void Catalog()
         {
+            config = GetConfig();
             String[] arr;
             list = new List<String>();
-            //string pathToFiles = System.IO.File.ReadLines(AppDomain.CurrentDomain.BaseDirectory + "conf.txt").ElementAtOrDefault(0);
-            string pathToFiles = "C://Media";
+
             //считываем строку с директорией треков из конфига
             try
             {
-                arr = Directory.GetFiles(pathToFiles, "*.mp3");
+                arr = Directory.GetFiles(config.MediaPath, "*.mp3");
                 for (int i = 0; i < arr.Length; i++)
                 {
                     list.Add(arr[i]);
@@ -196,7 +197,7 @@ namespace SoundControlByUrl.Controllers
             #region exceptions
             catch
             {
-                string message = "Directory " + pathToFiles + " not found";
+                string message = "Directory " + config.MediaPath + " not found";
                 int code = 700;
                 string type = "exсeption";
                 Log(message, code, type);
@@ -314,10 +315,9 @@ namespace SoundControlByUrl.Controllers
 
         public void Log(string message, int code, string type)
         {
-            //string logpath = System.IO.File.ReadLines(AppDomain.CurrentDomain.BaseDirectory + "conf.txt").ElementAtOrDefault(1);
-            string logPath = "C://Media//logs";
+            config = GetConfig();
             //считываем директорию для лога из конфига
-            System.IO.File.AppendAllText(logPath +
+            System.IO.File.AppendAllText(config.LogPath +
             DateTime.Now.ToString("yyyyMMdd") + ".log",
             "{" + "  " + "\"date\": \"" + DateTime.Now.ToString("dd.MM.yyyy") + "\", "
             + "  " + "\"time\": \"" + DateTime.Now.ToString("HH:mm:ss") + "\", " +
