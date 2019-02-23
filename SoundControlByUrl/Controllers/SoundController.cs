@@ -89,10 +89,9 @@ namespace SoundControlByUrl.Controllers
                         for (int i = 0; i < WaveOut.DeviceCount; i++)
                         {
                             WaveOutCapabilities cap = WaveOut.GetCapabilities(i);
-                            if (cap.ManufacturerGuid.ToString() == device.ManufacturerGuid &&
-                                cap.NameGuid.ToString() == device.NameGuid &&
-                                cap.ProductGuid.ToString() == device.ProductGuid &&
-                                cap.ProductName.ToString() == device.ProductName)
+                            if (cap.ProductName.ToString()
+                                               .Substring(cap.ProductName.ToString().IndexOf('(') + 1, 3)
+                                               .TrimEnd('-', ' ') == device.ProductName.ToString())
                             {
                                 selectedDevice = i;
                                 break;
@@ -107,7 +106,7 @@ namespace SoundControlByUrl.Controllers
                 if (locationId == "all")
                     for (int i = 0; i < numberOfDevices; i++)
                     {
-                        Play(i.ToString(), trackId);
+                        Play(deviceNames[i], trackId);
                     }
                 else
                     //Запускаем поток
@@ -159,10 +158,9 @@ namespace SoundControlByUrl.Controllers
                     for (int i = 0; i < WaveOut.DeviceCount; i++)
                     {
                         WaveOutCapabilities cap = WaveOut.GetCapabilities(i);
-                        if (cap.ManufacturerGuid.ToString() == device.ManufacturerGuid &&
-                            cap.NameGuid.ToString() == device.NameGuid &&
-                            cap.ProductGuid.ToString() == device.ProductGuid &&
-                            cap.ProductName.ToString() == device.ProductName)
+                        if (cap.ProductName.ToString()
+                                           .Substring(cap.ProductName.ToString().IndexOf('(') + 1, 3)
+                                           .TrimEnd('-', ' ') == device.ProductName.ToString())
                         {
                             selectedDevice = i;
                             break;
