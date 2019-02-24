@@ -90,7 +90,10 @@ namespace SoundControlByUrl.Controllers
                         {
                             WaveOutCapabilities cap = WaveOut.GetCapabilities(i);
                             if (cap.ProductName.Length - cap.ProductName.IndexOf('(') > 3
-                             && cap.ProductName.IndexOf('(') != -1)
+                             && cap.ProductName.IndexOf('(') != -1
+                             && cap.ProductName.ToString()
+                                               .Substring(cap.ProductName.ToString().IndexOf('(') + 1, 3)
+                                               .TrimEnd('-', ' ') == device.ProductName.ToString())
                             {
                                 selectedDevice = i;
                                 break;
@@ -158,7 +161,10 @@ namespace SoundControlByUrl.Controllers
                     {
                         WaveOutCapabilities cap = WaveOut.GetCapabilities(i);
                         if (cap.ProductName.Length - cap.ProductName.IndexOf('(') > 3
-                         && cap.ProductName.IndexOf('(') != -1)
+                         && cap.ProductName.IndexOf('(') != -1
+                         && cap.ProductName.ToString()
+                                           .Substring(cap.ProductName.ToString().IndexOf('(') + 1, 3)
+                                           .TrimEnd('-', ' ') == device.ProductName.ToString())
                         {
                             selectedDevice = i;
                             break;
